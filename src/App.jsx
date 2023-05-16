@@ -4,6 +4,7 @@ import UserCard from "./components/Card";
 import CardPlaceHolder from "./components/CardPlaceHolder";
 import { getUsers } from "./util/api";
 import styled from "styled-components";
+
 const MainContainer = styled.div`
   width: 100%;
   height: 100vh;
@@ -30,17 +31,34 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   
+  /* const date = new Date();
+  const minute = date.getMinutes(); */
+ /*  getUsers().then((data) => {
+    setUsers(data);
+    setLoading(false);
+  }); */
+
   useEffect(() => {
-    getUsers() // getUsers() retorna una promesa
-      .then((users) => {
-        setUsers(users);
+    const minuteFromStorage = sessionStorage.getItem("minute");
+    const currentMinute = new Date().getMinutes();
+
+    if(minuteFromStorage && parseInt(minuteFromStorage) === currentMinute){
+      const storedUsers = JSON.parse(sessionStorage.getItem("users"));
+      if(storedUsers){
+        setUsers(storedUsers);
         setLoading(false);
-        localStorage.setItem("users", JSON.stringify(users));
+        return;
       }
-      );
+    }
+
+    getUsers().then((data) => {
+      setUsers(data);
+      setLoading(false);
+      sessionStorage.setItem("minute", currentMinute);
+      sessionStorage.setItem("users", JSON.stringify(data));
+    });
   }, []);
-
-
+      
 
   return (
     <MainContainer>
@@ -55,22 +73,21 @@ function App() {
           </>
         ) : (
           users.map((user) => (
-            <UserCard
-              key={user.id}
-              email={user.email}
-              name={user.first_name}
-              last_name={user.last_name}
-              img={user.avatar}
-            />
+          <UserCard 
+          key={user.id} 
+          email={user.email} 
+          name={user.first_name} 
+          last_name={user.last_name} 
+          img={user.avatar}
+          />
           ))
         )}
-
-      </Container>
-  
-          
-      
+      </Container>   
     </MainContainer>
   );
 }
 
 export default App;
+
+
+

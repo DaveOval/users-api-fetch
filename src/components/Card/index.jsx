@@ -13,6 +13,14 @@ const Card = styled.div`
   position: relative;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
     font-family: sans-serif;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+  :hover {
+    transform: scale(1.05);
+  }
+  :active {
+    transform: scale(1);
+  }
 `;
 const CardContainerImg = styled.div`
     width: 100%;
@@ -27,7 +35,8 @@ const CardContainerImg = styled.div`
 `;
 const Img = styled.img`
   width: 130px;
-  border: 5px solid #FEFEFF;
+  height: 130px;
+  border: 5px solid #fefffe;
   border-radius: 50%;
   
 `;
@@ -36,17 +45,26 @@ const CardContainerInfo = styled.div`
     height: 100%;
     text-align: center;
 `;
+const CardName = styled.p`
+    font-size: 20px;
+    font-weight: bold;
+    padding: 0;
+`;
+const CardEmail = styled.p`
+    font-size: 14px;
+    font-weight: bold;
+`;
 
-const UserCard = ({key, email, name, last_name, img}) => {
+const UserCard = ({key, email, name, last_name, img,}) => {
   return (
-    <Card>
+    <Card id={key}>
       <CardContainerImg>
         <Img src={img}></Img>
       </CardContainerImg>
       <CardContainerInfo>
-        <p>{name}</p>
+        <CardName>{name}</CardName>
         <p>{last_name}</p>
-        <p>{email}</p>
+        <CardEmail>{email}</CardEmail>
       </CardContainerInfo>
     </Card>
   );
